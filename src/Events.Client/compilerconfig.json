@@ -1,0 +1,22 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/site.css",
+    "inputFile": "wwwroot/css/site.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/Sidebar.css",
+    "inputFile": "wwwroot/css/Sidebar.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/_bootstrap.custom.css",
+    "inputFile": "wwwroot/css/_bootstrap.custom.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/_variables.css",
+    "inputFile": "wwwroot/css/_variables.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/bootstrap.custom.css",
+    "inputFile": "wwwroot/css/bootstrap.custom.scss"
+  }
+]

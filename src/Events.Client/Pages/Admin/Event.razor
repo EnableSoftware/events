@@ -1,0 +1,78 @@
+﻿@page "/admin/event/{CategoryId:int}"
+@page "/admin/event/{CategoryId:int}/{Id:int}"
+@inherits EventBase
+@attribute [Authorize(Roles = "Admin")]
+
+@if (!IsLoading)
+{
+    <article class="container-fluid p-0 m-0">
+        <header class="row no-gutters p-4">
+            <h3 class="font-weight-light col text-truncate">@Name</h3>
+
+            <div class="col text-right">
+                <button class="btn btn-primary text-white" type="button" @onclick="HandleSubmit">Save</button>
+
+                @if (Id > 0)
+                {
+                    @if (_event.LockedDate.HasValue)
+                    {
+                        <button class="btn btn-secondary ml-2" type="button" @onclick="HandleUnlock">Unlock</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary ml-2" type="button" @onclick="HandleLock">Lock</button>
+                    }
+                    <button class="btn btn-danger ml-2" type="button" @onclick="HandleDelete">Delete</button>
+                }
+            </div>
+        </header>
+
+        <section class="px-4">
+            <EditForm Model="@_event" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+
+                <div class="form-group">
+                    <label for="date">
+                        Date
+                    </label>
+                    <input id="date" @bind="_event.Date" @bind:format="yyyy-MM-ddTHH:mm" class="form-control" type="datetime-local" />
+                    <ValidationMessage class="invalid-feedback" For="@(() => _event.Date)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="capacity">
+                        Capacity
+                    </label>
+                    <InputNumber id="capacity" class="form-control" placeholder="Enter event capacity" @bind-Value="_event.Capacity" />
+                    <ValidationMessage class="invalid-feedback" For="@(() => _event.Capacity)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="location">
+                        Location
+                    </label>
+                    <InputText id="location" class="form-control" placeholder="Enter event location" @bind-Value="_event.Location" />
+                    <ValidationMessage class="invalid-feedback" For="@(() => _event.Location)" />
+                </div>
+
+                <button class="d-none" type="submit"></button>
+            </EditForm>
+        </section>
+
+
+        @if (Id > 0 && _event.LockedDate.HasValue)
+        {
+            <section class="row no-gutters mt-3">
+                <label class="ml-4">
+                    Confirmed attendees
+                </label>
+
+                <Listing Items="_event.Attendees" TItem="EventAttendeeModel"></Listing>
+            </section>
+        }
+    </article>
+}
+else
+{
+    <div class="loader">Loading...</div>
+}

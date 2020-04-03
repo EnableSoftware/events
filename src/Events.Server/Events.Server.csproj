@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <DisableImplicitComponentsAnalyzers>true</DisableImplicitComponentsAnalyzers>
+        <UserSecretsId>35f8f060-0ca5-4075-83db-c182cf381806</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="3.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-preview2.20160.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2" />
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+        <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Events.Client\Events.Client.csproj" />
+        <ProjectReference Include="..\Events.Data.Model\Events.Data.Model.csproj" />
+        <ProjectReference Include="..\Events.Shared\Events.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Watch Include="..\Events.Client\**\*.razor" />
+        <Watch Include="..\Events.Shared\**\*.cs" />
+    </ItemGroup>
+
+</Project>

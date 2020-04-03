@@ -1,0 +1,24 @@
+@inherits UserMenuBase
+
+<div class="user-menu">
+    <AuthorizeView>
+        <Authorized>
+            <div class="btn" @onclick="ToggleMenu">
+                <img alt="Profile pic for @context.User.Identity.Name" height="32" width="32" class="rounded-circle my-1" src="@ProfileImageUrl?.AbsoluteUri" />
+            </div>
+            <div class="user-menu__content py-2 px-4 @NavMenuCssClass">
+                <ul class="list-unstyled m-0">
+                    <li>
+                        <span>@context.User.Identity.Name</span>
+                    </li>
+                    <li>
+                        <a class="primary" href="AzureAD/Account/SignOut">Sign out</a>
+                    </li>
+                </ul>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <a class="primary" href="AzureAD/Account/SignIn">Sign in</a>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

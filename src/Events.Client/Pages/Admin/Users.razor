@@ -1,0 +1,21 @@
+﻿@page "/admin/users"
+@inherits UsersBase
+@attribute [Authorize(Roles = "Admin")]
+
+<article class="container-fluid p-0 m-0">
+    <header class="row no-gutters p-4">
+        <h3 class="font-weight-light">Users</h3>
+    </header>
+
+    <section>
+        @if (!IsLoading && Items != null)
+        {
+            <Listing TItem="UserModel" Items="Items" RowClicked="OnRowClick"></Listing>
+        }
+        else
+        {
+            <div class="loader">Loading...</div>
+        }
+    </section>
+</article>
+

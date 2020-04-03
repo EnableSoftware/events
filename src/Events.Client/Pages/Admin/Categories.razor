@@ -1,0 +1,25 @@
+﻿@page "/admin/categories"
+@inherits CategoriesBase
+@attribute [Authorize(Roles = "Admin")]
+
+<article class="container-fluid p-0 m-0">
+    <header class="row no-gutters p-4">
+        <h3 class="font-weight-light">Categories</h3>
+
+        <div class="col text-right">
+            <NavLink class="btn btn-primary text-white" href="admin/category">New category</NavLink>
+        </div>
+    </header>
+
+    <section>
+        @if (!IsLoading && Items != null)
+        {
+            <Listing TItem="CategoryModel" Items="Items" RowClicked="OnRowClick"></Listing>
+        }
+        else
+        {
+            <div class="loader">Loading...</div>
+        }
+    </section>
+</article>
+

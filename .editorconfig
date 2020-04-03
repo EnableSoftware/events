@@ -1,0 +1,152 @@
+# TODO review all suppression rules.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{csproj,json,yml}]
+indent_size = 2
+
+# NOTE: Requires **VS2019 16.3** or later
+
+# Code files
+[*.cs]
+
+dotnet_diagnostic.CA1032.severity = warning
+
+dotnet_diagnostic.CA1057.severity = warning
+
+dotnet_diagnostic.CA1303.severity = none
+
+dotnet_diagnostic.CA1402.severity = warning
+
+dotnet_diagnostic.CA1406.severity = warning
+
+dotnet_diagnostic.CA1407.severity = warning
+
+dotnet_diagnostic.CA1408.severity = warning
+
+dotnet_diagnostic.CA1409.severity = warning
+
+dotnet_diagnostic.CA1411.severity = warning
+
+dotnet_diagnostic.CA1412.severity = warning
+
+dotnet_diagnostic.CA1413.severity = warning
+
+dotnet_diagnostic.CA1414.severity = warning
+
+dotnet_diagnostic.CA1600.severity = warning
+
+dotnet_diagnostic.CA1601.severity = warning
+
+dotnet_diagnostic.CA1819.severity = none
+
+dotnet_diagnostic.CA1821.severity = warning
+
+dotnet_diagnostic.CA1824.severity = warning
+
+dotnet_diagnostic.CA2001.severity = warning
+
+dotnet_diagnostic.CA2003.severity = warning
+
+dotnet_diagnostic.CA2007.severity = none
+
+dotnet_diagnostic.CA2135.severity = warning
+
+dotnet_diagnostic.CA2136.severity = warning
+
+dotnet_diagnostic.CA2139.severity = warning
+
+dotnet_diagnostic.CA2142.severity = warning
+
+dotnet_diagnostic.CA2143.severity = warning
+
+dotnet_diagnostic.CA2144.severity = warning
+
+dotnet_diagnostic.CA2145.severity = warning
+
+dotnet_diagnostic.CA2202.severity = none
+
+dotnet_diagnostic.CA2204.severity = warning
+
+dotnet_diagnostic.CA2211.severity = warning
+
+dotnet_diagnostic.CA2217.severity = warning
+
+dotnet_diagnostic.CA2218.severity = warning
+
+dotnet_diagnostic.CA2219.severity = warning
+
+dotnet_diagnostic.CA2225.severity = warning
+
+dotnet_diagnostic.CA2227.severity = none
+
+dotnet_diagnostic.CA2228.severity = warning
+
+dotnet_diagnostic.CA2230.severity = warning
+
+dotnet_diagnostic.CA2233.severity = warning
+
+dotnet_diagnostic.CA2234.severity = warning
+
+dotnet_diagnostic.CA2243.severity = warning
+
+dotnet_diagnostic.SA1101.severity = none
+
+dotnet_diagnostic.SA1133.severity = none
+
+dotnet_diagnostic.SA1200.severity = none
+
+dotnet_diagnostic.SA1309.severity = none
+
+dotnet_diagnostic.SA1516.severity = none
+
+dotnet_diagnostic.SA1600.severity = none
+
+dotnet_diagnostic.SA1601.severity = none
+
+dotnet_diagnostic.SA1611.severity = none
+
+dotnet_diagnostic.SA1615.severity = none
+
+dotnet_diagnostic.SA1618.severity = none
+
+dotnet_diagnostic.SA1633.severity = none
+
+dotnet_diagnostic.SA1634.severity = none
+
+dotnet_diagnostic.SA1639.severity = warning
+
+dotnet_diagnostic.SA1652.severity = none
+
+dotnet_diagnostic.SX1309.severity = warning
+
+dotnet_diagnostic.SX1309S.severity = warning
+
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = none
+
+# CA1051: Do not declare visible instance fields
+dotnet_diagnostic.CA1051.severity = none
+
+# CA1304: Specify CultureInfo
+dotnet_diagnostic.CA1304.severity = none
+
+# IDE0058: Expression value is never used
+csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = none
+
+# IDE0063: Use simple 'using' statement
+csharp_prefer_simple_using_statement = true:silent
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = silent

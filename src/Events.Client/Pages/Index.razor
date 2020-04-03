@@ -1,0 +1,44 @@
+@page "/"
+@inherits IndexBase;
+
+<AuthorizeView>
+    <Authorized>
+        @if (Categories != null && Categories.Any())
+        {
+            <div class="container-fluid">
+                <div class="row p-2">
+                    @foreach (var category in Categories)
+                    {
+                        <NavLink class="col-12 col-sm p-4 m-sm-2 mb-2 bg-primary rounded text-white text-decoration-none" href="@("category/" + category.Id)">
+                            <h3 class="display-4 text-truncate">@category.Name</h3>
+                            <p class="text-white text-truncate">@category.UpcomingEvents upcoming @(@category.UpcomingEvents == 1 ? "event" : "events")</p>
+                            @if (@category.NextEvent.HasValue)
+                            {
+                                <p class="text-white text-truncate">Your next event is on @category.NextEvent.Value.ToString(DateTimeFormatter.LongFormat)</p>
+                            }
+                            else
+                            {
+                                <p class="text-white text-truncate">You are not signed up to any @category.Name.ToLower() events</p>
+                            }
+                        </NavLink>
+                    }
+                </div>
+            </div>
+        }
+        else if (IsLoading)
+        {
+            <div class="loader"></div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div class="container mt-4">
+            <div class="row text-center">
+                <div class="col">
+                    <img width="256" height="256" src="icon.svg" />
+                    <h3 class="display-3 m-4">Events</h3>
+                    <a class="text-white btn btn-lg btn-primary mt-4" href="AzureAD/Account/SignIn">Sign in with Active Directory</a>
+                </div>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>

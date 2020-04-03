@@ -1,0 +1,41 @@
+﻿@inherits LayoutComponentBase
+
+@if (StartupComplete)
+{
+    <NavMenu ToggleClicked="Toggle" />
+    <div class="container-fluid m-0 p-0">
+        <div class="row no-gutters">
+            <div class="col">
+                <Sidebar @ref="sidebar" />
+            </div>
+            <main role="main" class="col-12 p-0">
+                @Body
+            </main>
+        </div>
+    </div>
+}
+else
+{
+    <div class="loader">Loading...</div>
+}
+
+
+@code {
+
+    public bool StartupComplete { get; set; }
+    Sidebar sidebar;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            StartupComplete = true;
+            StateHasChanged();
+        }
+    }
+
+    protected void Toggle()
+    {
+        sidebar.ToggleSidebar();
+    }
+}

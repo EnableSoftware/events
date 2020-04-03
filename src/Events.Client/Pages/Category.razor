@@ -1,0 +1,163 @@
+@page "/category/{Id:int}"
+@inherits CategoryBase
+@attribute [Authorize]
+
+@if (!IsLoading)
+{
+    <section>
+        @if (Id > 0 && ConfirmedUpcomingEvents != null && ConfirmedUpcomingEvents.Count() > 0)
+        {
+            <article class="container-fluid p-0 m-0">
+                <header class="row no-gutters p-4">
+                    <h3 class="font-weight-light col text-truncate">Your confirmed @Name events</h3>
+                </header>
+
+                <div class="row no-gutters">
+                    <div class="col">
+                        <table class="table table-sm">
+                            <colgroup>
+                                <col class="d-lg-table-cell d-none" width="288" />
+                                <col class="d-lg-none pl-4" width="192" />
+                                <col class="d-lg-table-cell d-none" width="96" />
+                                <col class="d-lg-table-cell d-none" />
+                                <col class="d-lg-table-cell d-none" />
+                                <col class="d-lg-table-cell d-none" width="128" />
+                                <col class="d-lg-table-cell" width="96" />
+                                <col class="d-lg-table-cell" width="96" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="d-lg-table-cell d-none">Date</th>
+                                    <th class="d-md-table-cell d-lg-none pl-4">Date</th>
+                                    <th class="d-lg-table-cell d-none">Capacity</th>
+                                    <th class="d-lg-table-cell d-none">Attendees</th>
+                                    <th class="d-lg-table-cell d-none">Location</th>
+                                    <th class="d-lg-table-cell d-none"># of sign ups</th>
+                                    <th class="d-lg-table-cell"></th>
+                                    <th class="d-lg-table-cell"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ConfirmedUpcomingEvents)
+                                {
+                                    <tr>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.Date.ToString("dddd, dd MMMM yyyy HH:mm")</td>
+                                        <td class="text-truncate d-md-table-cell d-lg-none pl-4">@item.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.Capacity</td>
+                                        <td class="text-truncate d-lg-table-cell d-none"><span title="@(@item.LockedDate.HasValue ? string.Join(", ", item.Attendees.Select(o => o.Name)) : "TBC")">@(@item.LockedDate.HasValue ? string.Join(", ", item.Attendees.Select(o => o.Name)) : "TBC")</span></td>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.Location</td>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.SignedUpCount</td>
+                                        <td class="text-truncate d-lg-table-cell"></td>
+                                        <td class="text-right d-lg-table-cell">
+                                            @if (!SignUpsLoading.Contains(item.Id))
+                                            {
+                                                @if (item.SignedUp)
+                                                {
+                                                    <span @onclick="((e) => Cancel(item, true))" class="text-primary cursor-pointer">cancel</span>
+                                                }
+                                                else
+                                                {
+                                                    <span @onclick="((e) => SignUp(item))" class="text-primary cursor-pointer">sign up</span>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </article>
+        }
+
+        <article class="container-fluid p-0 m-0">
+            <header class="row no-gutters p-4">
+                <h3 class="font-weight-light col text-truncate">Upcoming @Name events</h3>
+            </header>
+
+            <div class="row no-gutters">
+                <div class="col">
+                    @if (Id > 0 && UpcomingEvents != null && UpcomingEvents.Count() > 0)
+                    {
+                        <table class="table table-sm">
+                            <colgroup>
+                                <col class="d-lg-table-cell d-none" width="288" />
+                                <col class="d-lg-none pl-4" width="192" />
+                                <col class="d-lg-table-cell d-none" width="96" />
+                                <col class="d-lg-table-cell d-none" />
+                                <col class="d-lg-table-cell d-none" />
+                                <col class="d-lg-table-cell d-none" width="128" />
+                                <col class="d-lg-table-cell" width="96" />
+                                <col class="d-lg-table-cell" width="96" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="d-lg-table-cell d-none">Date</th>
+                                    <th class="d-md-table-cell d-lg-none pl-4">Date</th>
+                                    <th class="d-lg-table-cell d-none">Capacity</th>
+                                    <th class="d-lg-table-cell d-none">Attendees</th>
+                                    <th class="d-lg-table-cell d-none">Location</th>
+                                    <th class="d-lg-table-cell d-none"># of sign ups</th>
+                                    <th class="d-lg-table-cell">Signed up?</th>
+                                    <th class="d-lg-table-cell"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in UpcomingEvents)
+                                {
+                                    <tr class="@(item.LockedDate.HasValue ? "table-secondary" : "")">
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.Date.ToString("dddd, dd MMMM yyyy HH:mm")</td>
+                                        <td class="text-truncate d-md-table-cell d-lg-none pl-4">@item.Date.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.Capacity</td>
+                                        <td class="text-truncate d-lg-table-cell d-none"><span title="@(@item.LockedDate.HasValue ? string.Join(", ", item.Attendees.Select(o => o.Name)) : "TBC")">@(@item.LockedDate.HasValue ? string.Join(", ", item.Attendees.Select(o => o.Name)) : "TBC")</span></td>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.Location</td>
+                                        <td class="text-truncate d-lg-table-cell d-none">@item.SignedUpCount</td>
+                                        <td class="text-truncate text-center align-middle d-lg-table-cell">
+                                            @if (!SignUpsLoading.Contains(item.Id))
+                                            {
+                                                @if (item.SignedUp)
+                                                {
+                                                    <i class="far fa-check-circle text-success"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="far fa-times-circle text-danger"></i>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="loader loader--small">Loading...</div>
+                                            }
+                                        </td>
+                                        <td class="text-truncate text-right align-middle d-lg-table-cell">
+                                            @if (!item.LockedDate.HasValue)
+                                            {
+                                                @if (!SignUpsLoading.Contains(item.Id))
+                                                {
+                                                    @if (item.SignedUp)
+                                                    {
+                                                        <span @onclick="((e) => Cancel(item))" class="text-primary cursor-pointer">cancel</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span @onclick="((e) => SignUp(item))" class="text-primary cursor-pointer">sign up</span>
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </article>
+
+    </section>
+}
+else
+{
+    <div class="loader">Loading...</div>
+}

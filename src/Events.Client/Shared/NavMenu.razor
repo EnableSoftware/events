@@ -1,0 +1,15 @@
+@inherits NavMenuBase
+
+    <nav class="navbar fixed-top flex-nowrap p-0">
+        <AuthorizeView>
+            <Authorized>
+                <button class="btn col-auto ml-2" @onclick="ToggleClicked"><i class="fas fa-bars"></i></button>
+            </Authorized>
+        </AuthorizeView>
+        <div class="col-auto px-y mr-0">
+            <a class="navbar-brand p-0 mr-2" href="#">Events</a><span class="badge badge-secondary align-top">0.0.1</span>
+        </div>
+        <div class="col text-right">
+            <UserMenu></UserMenu>
+        </div>
+    </nav>

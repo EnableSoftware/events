@@ -1,0 +1,60 @@
+﻿@page "/admin/user/{Id:int}"
+@inherits UserBase
+@attribute [Authorize(Roles = "Admin")]
+
+@if (!IsLoading)
+{
+    <article class="container-fluid p-0 m-0">
+        <header class="row no-gutters p-4">
+            <h3 class="font-weight-light col text-truncate">@Name</h3>
+
+            <div class="col text-right">
+                <button class="btn btn-primary text-white" type="button" @onclick="HandleSubmit">Save</button>
+
+                @if (Id > 0)
+                {
+                    <button class="btn btn-danger ml-2" type="button" @onclick="HandleDelete">Delete</button>
+                }
+            </div>
+        </header>
+
+        <section class="px-4">
+            <EditForm Model="@_user" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+
+                <div class="form-group">
+                    <label for="name">
+                        Name
+                    </label>
+
+                    <InputText id="name" class="form-control" placeholder="Enter user name" @bind-Value="_user.Name" readonly />
+                    <ValidationMessage class="invalid-feedback" For="@(() => _user.Name)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <InputText id="email" class="form-control" placeholder="Enter email" @bind-Value="_user.Email" readonly />
+                    <ValidationMessage class="invalid-feedback" For="@(() => _user.Email)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="is-admin">
+                        Is admin
+                    </label>
+
+                    <InputCheckbox id="is-admin" class="d-block" @bind-Value="_user.IsAdmin" />
+                    <ValidationMessage class="invalid-feedback" For="@(() => _user.IsAdmin)" />
+                </div>
+
+                <button class="d-none" type="submit"></button>
+            </EditForm>
+        </section>
+    </article>
+}
+else
+{
+    <div class="loader">Loading...</div>
+}

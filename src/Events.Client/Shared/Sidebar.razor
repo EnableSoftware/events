@@ -1,0 +1,47 @@
+@inherits SidebarBase
+
+<nav class="sidebar @(NavMenuCssClass)">
+    <div class="sidebar-overlay" @onclick="ToggleSidebar">
+    </div>
+    <div class="p-4 sidebar-content">
+        <ul class="nav flex-column">
+            @if (Categories != null && Categories.Any())
+            {
+                <li class="nav-item">
+                    <h6 class="sidebar-heading text-muted">
+                        Categories
+                    </h6>
+                    <ul class="nav flex-column ml-1 mb-3">
+                        @foreach (var category in Categories)
+                        {
+                            <li class="nav-item">
+                                <NavLink class="nav-link text-truncate p-0" href="@($"category/{category.Id}")">
+                                    @category.Name
+                                </NavLink>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+            <AuthorizeView Roles="Admin">
+                <li class="nav-item">
+                    <h6 class="sidebar-heading text-muted">
+                        Admin
+                    </h6>
+                    <ul class="nav flex-column ml-1">
+                        <li class="nav-item">
+                            <NavLink class="nav-link text-truncate p-0" href="admin/categories">
+                                Categories
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink class="nav-link text-truncate p-0" href="admin/users">
+                                Users
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
+            </AuthorizeView>
+        </ul>
+    </div>
+</nav>

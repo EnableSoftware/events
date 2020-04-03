@@ -1,0 +1,35 @@
+@typeparam TItem
+@inherits ListingBase<TItem>
+
+@if (Items != null && Items.Count() > 0 && Columns.Count() > 0)
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                @foreach (var (columnName, colindex) in Columns.Keys.WithIndex())
+                {
+                    <th class="@(colindex > 1 ? "d-lg-table-cell d-none" : "d-table-cell")">@columnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (item, index) in Items.WithIndex())
+            {
+                <tr @onclick="((e) => RowClicked(item))" class="@RowCssClass">
+                    @foreach (var (value, colindex) in Columns.Keys.WithIndex())
+                    {
+                        // TODO, refactor
+                        @if (Columns[value].ElementAt(index) is DateTimeOffset)
+                        {
+                            <td class="@(colindex > 1 ? "d-lg-table-cell d-none" : "d-table-cell")">@(((DateTimeOffset)Columns[value].ElementAt(index)).ToString(DateTimeFormatter.LongFormat))</td>
+                        }
+                        else
+                        {
+                            <td class="@(colindex > 1 ? "d-lg-table-cell d-none" : "d-table-cell")">@Columns[value].ElementAt(index)</td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}

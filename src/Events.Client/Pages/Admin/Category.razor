@@ -1,0 +1,60 @@
+@page "/admin/category"
+@page "/admin/category/{Id:int}"
+@inherits CategoryBase
+@attribute [Authorize(Roles = "Admin")]
+
+@if (!IsLoading)
+{
+    <article class="container-fluid p-0 m-0">
+        <header class="row no-gutters p-4">
+            <h3 class="font-weight-light col text-truncate">@Name</h3>
+
+            <div class="col text-right">
+                <button class="btn btn-primary text-white" type="button" @onclick="HandleSubmit">Save</button>
+
+                @if (Id > 0)
+                {
+                    <button class="btn btn-danger ml-2" type="button" @onclick="HandleDelete">Delete</button>
+                }
+            </div>
+        </header>
+
+        <section class="row no-gutters px-4">
+            <EditForm class="col" Model="@Category" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+
+                <div class="form-group">
+                    <label for="name">
+                        Name
+                    </label>
+                    <InputText id="name" class="form-control" placeholder="Enter category name" @bind-Value="Category.Name" />
+                    <ValidationMessage class="invalid-feedback" For="@(() => Category.Name)" />
+                </div>
+
+                <button class="d-none" type="submit"></button>
+            </EditForm>
+        </section>
+
+        <section class="row no-gutters mt-3">
+            @if (Id > 0)
+            {
+                <label class="ml-4">
+                    Events
+                </label>
+                <div class="col text-right mr-4 mb-3">
+                    <NavLink class="btn btn-primary text-white" href="@("admin/event/" + Id)">New event</NavLink>
+                </div>
+            }
+
+            @if (Id > 0 && Events != null && Events.Count() > 0)
+            {
+                <Listing TItem="EventModel" Items="Events" RowClicked="OnRowClick"></Listing>
+            }
+        </section>
+
+    </article>
+}
+else
+{
+    <div class="loader">Loading...</div>
+}
