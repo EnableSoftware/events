@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+  portainer:
+    container_name: events_portainer
+    image: portainer/portainer
+    restart: unless-stopped
+    ports:
+      - 9000:9000
+    volumes:
+      - /docker/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  postgres:
+    container_name: events_postgres
+    image: postgres:12.2
+    environment:
+      POSTGRES_USER: ${POSTGRES_DEFAULT_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_DEFAULT_PASSWORD:-password}
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: events_pgadmin
+    image: dpage/pgadmin4:4.19
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-password}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+    name: events_postgres
+
+volumes:
+  postgres:
+    name: events_postgres
+  pgadmin:
+    name: events_pgadmin

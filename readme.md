@@ -16,13 +16,13 @@
 ### Dependencies
 
 - [Latest .NET core SDK](https://dotnet.microsoft.com/download)
+- [Entity Framework core tools](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet#installing-the-tools)
 - [Docker](https://www.docker.com/products/docker-desktop)
 
 #### Until a better SCSS compilation solution is found
 
 - Visual Studio 2019
 - Visual Studio 2019 extension [Web Compiler](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.WebCompiler)
-
 
 ### Local development
 
