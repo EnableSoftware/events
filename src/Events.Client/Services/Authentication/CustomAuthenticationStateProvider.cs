@@ -1,9 +1,8 @@
 using Events.Client.State;
 using Events.Shared.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -27,7 +26,7 @@ namespace Events.Client.Services.Authentication
             // TODO gracefully handle non authorised users, prevent post to https://login.microsoftonline.com, cors issue
             try
             {
-                var result = await _httpClient.GetJsonAsync<UserModel>("api/account/get-self");
+                var result = await _httpClient.GetFromJsonAsync<UserModel>("api/account/get-self");
                 _userState.SetUserInfo(result);
                 var identity = new ClaimsIdentity(new[]
                 {

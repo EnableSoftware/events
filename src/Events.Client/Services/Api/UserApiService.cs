@@ -1,9 +1,9 @@
 using Events.Shared.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,22 +24,23 @@ namespace Events.Client.Services.Api
 
         public async Task<IEnumerable<UserModel>> Get()
         {
-            return await _httpClient.GetJsonAsync<IEnumerable<UserModel>>("api/user");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<UserModel>>("api/user");
         }
 
         public async Task<UserModel> Get(int id)
         {
-            return await _httpClient.GetJsonAsync<UserModel>($"api/user/{id}");
+            return await _httpClient.GetFromJsonAsync<UserModel>($"api/user/{id}");
         }
 
         public async Task<int> Post(UserModel model)
         {
-            return await _httpClient.PostJsonAsync<int>("api/user", model);
+            var response = await _httpClient.PostAsJsonAsync("api/user", model);
+            return await response.Content.ReadFromJsonAsync<int>();
         }
 
         public async Task Put(int id, UserModel model)
         {
-            await _httpClient.PutJsonAsync($"api/user/{id}", model);
+            await _httpClient.PutAsJsonAsync($"api/user/{id}", model);
         }
 
         public async Task Delete(int id)

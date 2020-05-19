@@ -1,7 +1,7 @@
-﻿using Events.Shared.Models;
-using Microsoft.AspNetCore.Components;
+using Events.Shared.Models;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace Events.Client.Services.Api
@@ -17,27 +17,28 @@ namespace Events.Client.Services.Api
 
         public async Task<IEnumerable<EventModel>> Get()
         {
-            return await _httpClient.GetJsonAsync<IEnumerable<EventModel>>("api/event");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<EventModel>>("api/event");
         }
 
         public async Task<EventModel> Get(int id)
         {
-            return await _httpClient.GetJsonAsync<EventModel>($"api/event/{id}");
+            return await _httpClient.GetFromJsonAsync<EventModel>($"api/event/{id}");
         }
 
         public async Task<IEnumerable<EventModel>> GetUpcomingForCategory(int id)
         {
-            return await _httpClient.GetJsonAsync<IEnumerable<EventModel>>($"api/event/get-for-category/{id}");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<EventModel>>($"api/event/get-for-category/{id}");
         }
 
         public async Task<int> Post(EventModel model)
         {
-            return await _httpClient.PostJsonAsync<int>("api/event", model);
+            var response = await _httpClient.PostAsJsonAsync("api/event", model);
+            return await response.Content.ReadFromJsonAsync<int>();
         }
 
         public async Task Put(int id, EventModel model)
         {
-            await _httpClient.PutJsonAsync($"api/event/{id}", model);
+            await _httpClient.PutAsJsonAsync($"api/event/{id}", model);
         }
 
         public async Task Delete(int id)
@@ -47,22 +48,22 @@ namespace Events.Client.Services.Api
 
         public async Task SignUp(int id)
         {
-            await _httpClient.PutJsonAsync($"api/event/sign-up/{id}", true);
+            await _httpClient.PutAsJsonAsync($"api/event/sign-up/{id}", true);
         }
 
         public async Task CancelSignUp(int id)
         {
-            await _httpClient.PutJsonAsync($"api/event/sign-up/{id}", false);
+            await _httpClient.PutAsJsonAsync($"api/event/sign-up/{id}", false);
         }
 
         public async Task Lock(int id)
         {
-            await _httpClient.PutJsonAsync($"api/event/lock-event/{id}", null);
+            await _httpClient.PutAsync($"api/event/lock-event/{id}", null);
         }
 
         public async Task Unlock(int id)
         {
-            await _httpClient.PutJsonAsync($"api/event/unlock-event/{id}", null);
+            await _httpClient.PutAsync($"api/event/unlock-event/{id}", null);
         }
     }
 }

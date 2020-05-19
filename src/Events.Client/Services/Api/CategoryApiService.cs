@@ -1,7 +1,7 @@
-﻿using Events.Shared.Models;
-using Microsoft.AspNetCore.Components;
+using Events.Shared.Models;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace Events.Client.Services.Api
@@ -17,22 +17,23 @@ namespace Events.Client.Services.Api
 
         public async Task<IEnumerable<CategoryModel>> Get()
         {
-            return await _httpClient.GetJsonAsync<IEnumerable<CategoryModel>>("api/category");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<CategoryModel>>("api/category");
         }
 
         public async Task<CategoryModel> Get(int id)
         {
-            return await _httpClient.GetJsonAsync<CategoryModel>($"api/category/{id}");
+            return await _httpClient.GetFromJsonAsync<CategoryModel>($"api/category/{id}");
         }
 
         public async Task<int> Post(CategoryModel model)
         {
-            return await _httpClient.PostJsonAsync<int>("api/category", model);
+            var response = await _httpClient.PostAsJsonAsync("api/category", model);
+            return await response.Content.ReadFromJsonAsync<int>();
         }
 
         public async Task Put(int id, CategoryModel model)
         {
-            await _httpClient.PutJsonAsync($"api/category/{id}", model);
+            await _httpClient.PutAsJsonAsync($"api/category/{id}", model);
         }
 
         public async Task Delete(int id)
