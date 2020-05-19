@@ -264,3 +264,7 @@ __pycache__/
 # Custom
 
 scripts/set-user-secrets.cmd
+
+# Release
+**/PublishProfiles
+src/Events.Server/appsettings.release.json
