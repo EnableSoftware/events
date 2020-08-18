@@ -1,4 +1,4 @@
-﻿/* TODO Split into individual files */
+/* TODO Split into individual files */
 
 @import "_variables.scss";
 $top-bar-height: 4rem;
@@ -103,6 +103,10 @@ main {
 
 .sidebar .nav-link.active {
     color: $primary;
+}
+
+.sidebar .loader-item {
+    height: 230px;
 }
 
 /* UserMenu */

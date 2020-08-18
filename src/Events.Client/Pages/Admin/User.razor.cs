@@ -1,7 +1,6 @@
 using Events.Client.Services.Api;
 using Events.Shared.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
 using System.Threading.Tasks;
 
 namespace Events.Client.Pages.Admin
@@ -67,18 +66,7 @@ namespace Events.Client.Pages.Admin
         protected override void OnInitialized()
         {
             IsLoading = Id > 0;
-            NavigationManager.LocationChanged += LocationChanged;
             base.OnInitialized();
-        }
-
-        protected async void LocationChanged(object sender, LocationChangedEventArgs e)
-        {
-            await Load();
-        }
-
-        public void Dispose()
-        {
-            NavigationManager.LocationChanged -= LocationChanged;
         }
     }
 }

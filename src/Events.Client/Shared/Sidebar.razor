@@ -5,7 +5,13 @@
     </div>
     <div class="p-4 sidebar-content">
         <ul class="nav flex-column">
-            @if (Categories != null && Categories.Any())
+            @if (IsLoading)
+            {
+                <li class="nav-item loader-item">
+                    <div class="loader"></div>
+                </li>
+            }
+            else if (Categories != null && Categories.Any())
             {
                 <li class="nav-item">
                     <h6 class="sidebar-heading text-muted">
@@ -23,6 +29,7 @@
                     </ul>
                 </li>
             }
+
             <AuthorizeView Roles="Admin">
                 <li class="nav-item">
                     <h6 class="sidebar-heading text-muted">
