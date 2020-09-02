@@ -1,4 +1,4 @@
-# Events
+`# Events
 
 'Events' is a long lived hackathon project with the purpose of exploring bleeding edge technologies to discover what does and doesn't work well going forward in the world of .NET. It intends to become a fully functional generic booking system in the long term.
 
@@ -35,8 +35,8 @@ The following settings are required:
 - ClientId
 - TenantId
 
-Execute the following to configure this: 
-`./scripts/set-user-secrets.cmd`
+Execute the following to configure this:
+`./scripts/windows/set-user-secrets.cmd`
 
 #### Running the server
 
