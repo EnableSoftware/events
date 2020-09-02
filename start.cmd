@@ -1,7 +1,7 @@
 @echo off
 pushd .\scripts\windows
 
-ECHO [Setting up docker] portainer (localhost:9000), pgadmin (localhost:5050), postgres (localhost:5442)
+ECHO [Setting up docker] postgres (localhost:5442)
 call docker.cmd
 ECHO.
 
