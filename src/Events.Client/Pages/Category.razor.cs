@@ -47,27 +47,9 @@ namespace Events.Client.Pages
             StateHasChanged();
         }
 
-        protected override void OnInitialized()
-        {
-            NavigationManager.LocationChanged += LocationChanged;
-        }
-
-        protected async void LocationChanged(object sender, LocationChangedEventArgs e)
+        protected async override Task OnParametersSetAsync()
         {
             await Load();
-        }
-
-        public void Dispose()
-        {
-            NavigationManager.LocationChanged -= LocationChanged;
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            if (firstRender)
-            {
-                await Load();
-            }
         }
 
         public async Task SignUp(EventModel eventModel)

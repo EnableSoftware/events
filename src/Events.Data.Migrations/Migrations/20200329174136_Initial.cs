@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -109,27 +109,29 @@ namespace Events.Data.Migrations.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Id value removed so the rows can use the auto increment.
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Name" },
                 values: new object[,]
                 {
-                    { 1, "Badminton" },
-                    { 2, "Football" },
-                    { 3, "Social" },
-                    { 4, "Video games" },
-                    { 5, "Board games" }
+                    { "Badminton" },
+                    { "Football" },
+                    { "Social" },
+                    { "Video games" },
+                    { "Board games" }
                 });
 
+            // Id value removed so the rows can use the auto increment.
             migrationBuilder.InsertData(
                 table: "Events",
-                columns: new[] { "Id", "Capacity", "CategoryId", "Date", "Location", "LockedDate" },
+                columns: new[] { "Capacity", "CategoryId", "Date", "Location", "LockedDate" },
                 values: new object[,]
                 {
-                    { 1, 8, 1, new DateTimeOffset(new DateTime(2020, 4, 1, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
-                    { 2, 8, 1, new DateTimeOffset(new DateTime(2020, 4, 8, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
-                    { 3, 8, 1, new DateTimeOffset(new DateTime(2020, 4, 15, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
-                    { 4, 8, 1, new DateTimeOffset(new DateTime(2020, 4, 22, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null }
+                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 1, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
+                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 8, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
+                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 15, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
+                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 22, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null }
                 });
 
             migrationBuilder.CreateIndex(
