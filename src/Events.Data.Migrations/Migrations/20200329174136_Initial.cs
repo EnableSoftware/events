@@ -128,10 +128,10 @@ namespace Events.Data.Migrations.Migrations
                 columns: new[] { "Capacity", "CategoryId", "Date", "Location", "LockedDate" },
                 values: new object[,]
                 {
-                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 1, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
-                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 8, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
-                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 15, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
-                    { 8, 1, new DateTimeOffset(new DateTime(2020, DateTimeOffset.Now.Month, 22, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null }
+                    { 8, 1, new DateTimeOffset(new DateTime(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, 1, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
+                    { 8, 1, new DateTimeOffset(new DateTime(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, 8, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
+                    { 8, 1, new DateTimeOffset(new DateTime(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, 15, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null },
+                    { 8, 1, new DateTimeOffset(new DateTime(DateTimeOffset.Now.Year, DateTimeOffset.Now.Month, 22, 18, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 1, 0, 0, 0)), "Stratford Leisure Centre", null }
                 });
 
             migrationBuilder.CreateIndex(
