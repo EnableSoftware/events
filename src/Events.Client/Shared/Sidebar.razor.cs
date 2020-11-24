@@ -1,12 +1,9 @@
 using Events.Client.Services.Api;
-using Events.Client.Services.Authentication;
 using Events.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Events.Client.Shared
@@ -29,7 +26,7 @@ namespace Events.Client.Shared
         public async void ToggleSidebar()
         {
             _expandNavMenu = !_expandNavMenu;
-           
+
             if (_expandNavMenu)
             {
                 IsLoading = true;
@@ -46,27 +43,14 @@ namespace Events.Client.Shared
             StateHasChanged();
         }
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             NavigationManager.LocationChanged += LocationChanged;
             base.OnInitialized();
         }
 
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    if (firstRender)
-        //    {
-        //        await Load();
-        //    }
-        //}
-
-        //protected async Task Load()
-        //{
-        //}
-
         protected void LocationChanged(object sender, LocationChangedEventArgs e)
         {
-            System.Console.WriteLine(e.Location);
             _expandNavMenu = false;
             StateHasChanged();
         }

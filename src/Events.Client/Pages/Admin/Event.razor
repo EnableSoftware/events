@@ -1,7 +1,6 @@
 ﻿@page "/admin/event/{CategoryId:int}"
 @page "/admin/event/{CategoryId:int}/{Id:int}"
 @inherits EventBase
-@attribute [Authorize(Roles = "Admin")]
 
 @if (!IsLoading)
 {

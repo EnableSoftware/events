@@ -1,4 +1,5 @@
 using Events.Data.Model;
+using Events.Data.Postgres;
 using Events.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace Events.Server.Controllers
                     Date = o.Date,
                     Id = o.Id,
                     LockedDate = o.LockedDate,
-                    Attendees = o.UserSignUps.Where(q => q.Priority <= o.Capacity && q.Priority > 0).Select(q => new EventAttendeeModel() { Id = q.UserId, Name = q.User.Name }),
+                    Attendees = o.UserSignUps.Where(q => q.Priority <= o.Capacity && q.Priority > 0).Select(q => new EventAttendeeModel() { Id = q.UserId, Name = $"{q.User.FirstName} {q.User.LastName}" }),
                     Location = o.Location,
                     SignedUpCount = o.UserSignUps.Count
                 }).ToListAsync();
@@ -68,7 +69,7 @@ namespace Events.Server.Controllers
                     Date = o.Date,
                     Id = o.Id,
                     Location = o.Location,
-                    Attendees = o.UserSignUps.Where(q => q.Priority <= o.Capacity && q.Priority > 0).Select(q => new EventAttendeeModel() { Id = q.UserId, Name = q.User.Name }),
+                    Attendees = o.UserSignUps.Where(q => q.Priority <= o.Capacity && q.Priority > 0).Select(q => new EventAttendeeModel() { Id = q.UserId, Name = $"{q.User.FirstName} {q.User.LastName}" }),
                     LockedDate = o.LockedDate,
                     SignedUp = o.UserSignUps.Any(o => o.UserId == user.Id),
                     SignedUpCount = o.UserSignUps.Count
@@ -109,7 +110,7 @@ namespace Events.Server.Controllers
                 CategoryId = dbEvent.CategoryId,
                 Date = dbEvent.Date,
                 Id = dbEvent.Id,
-                Attendees = dbEvent.UserSignUps.Where(q => q.Priority <= dbEvent.Capacity && q.Priority > 0).Select(q => new EventAttendeeModel() { Id = q.UserId, Name = q.User.Name }),
+                Attendees = dbEvent.UserSignUps.Where(q => q.Priority <= dbEvent.Capacity && q.Priority > 0).Select(q => new EventAttendeeModel() { Id = q.UserId, Name = $"{q.User.FirstName} {q.User.LastName}" }),
                 LockedDate = dbEvent.LockedDate,
                 Location = dbEvent.Location,
                 SignedUp = dbEvent.UserSignUps.Any(o => o.UserId == user.Id),
@@ -119,7 +120,6 @@ namespace Events.Server.Controllers
             return Ok(eventModel);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Post(EventModel model)
         {
@@ -143,7 +143,6 @@ namespace Events.Server.Controllers
             return Ok(dbEvent.Id);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, EventModel model)
         {
@@ -167,7 +166,6 @@ namespace Events.Server.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -185,7 +183,6 @@ namespace Events.Server.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("unlock-event/{id}")]
         public async Task<IActionResult> Unlock(int id)
         {
@@ -208,7 +205,6 @@ namespace Events.Server.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("lock-event/{id}")]
         public async Task<IActionResult> Lock(int id)
         {

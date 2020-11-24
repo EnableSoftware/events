@@ -1,7 +1,11 @@
+using System.Linq;
 using Events.Data.Model;
+using Events.Data.Postgres;
 using Events.Server.Extensions.StartupExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,54 +26,42 @@ namespace Events.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddControllers();
-            services.AddCustomCompression();
-            services.AddResponseCaching();
-
-            // TODO Support multiple types of database, control through appsettings
-            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ApplicationDbContext")));
             services.AddADAuthentication(Configuration);
 
-            // Only required while experimenting with server side pre-rendering
-            services.AddCustomPrerenderServices();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
+
+            services.AddEventsClientConfiguration(Configuration);
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            // To allow Client app to load config from server instead of wwwroot/appsettings.json
+            var rewriteOptions = new RewriteOptions().AddRewrite(@"^appsettings\.json$", "clientconfiguration", false);
+            app.UseRewriter(rewriteOptions);
+
+            app.UseResponseCompression();
+
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
                 app.UseWebAssemblyDebugging();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
-                app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains());
+                app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
-            // Security
-            app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(opts => opts.NoReferrer());
-            app.UseXXssProtection(options => options.EnabledWithBlockMode());
-            app.UseCsp(opts => opts
-                .BlockAllMixedContent()
-                .StyleSources(s => s.Self())
-                .StyleSources(s => s.UnsafeInline())
-                .FontSources(s => s.Self())
-                .FormActions(s => s.Self())
-                .FrameAncestors(s => s.Self())
-                .ScriptSources(s => s.Self())
-                .ScriptSources(s => s.UnsafeEval())
-                .ScriptSources(s => s.UnsafeInline()));
-
-            app.UseResponseCompression();
-            app.UseResponseCaching();
-
-            app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
-
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -78,8 +70,9 @@ namespace Events.Server
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.MapFallbackToFile("index.html");
             });
         }
     }

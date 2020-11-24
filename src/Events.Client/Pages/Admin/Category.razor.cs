@@ -1,7 +1,6 @@
 using Events.Client.Services.Api;
 using Events.Shared.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

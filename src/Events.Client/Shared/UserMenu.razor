@@ -12,13 +12,13 @@
                         <span>@context.User.Identity.Name</span>
                     </li>
                     <li>
-                        <a class="primary" href="AzureAD/Account/SignOut">Sign out</a>
+                        <a class="primary" @onclick="BeginLogout">Sign out</a>
                     </li>
                 </ul>
             </div>
         </Authorized>
         <NotAuthorized>
-            <a class="primary" href="AzureAD/Account/SignIn">Sign in</a>
+            <a class="primary" href="authentication/login">Sign in</a>
         </NotAuthorized>
     </AuthorizeView>
 </div>

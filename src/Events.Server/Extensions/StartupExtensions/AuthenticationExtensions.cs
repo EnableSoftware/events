@@ -1,16 +1,13 @@
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Events.Data.Model;
-using Events.Server.Services.Authentication;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Hosting;
+using Events.Data.Postgres;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+using Microsoft.Identity.Web;
 
 namespace Events.Server.Extensions.StartupExtensions
 {
@@ -18,53 +15,37 @@ namespace Events.Server.Extensions.StartupExtensions
     {
         public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication(AzureADDefaults.OpenIdScheme)
-                .AddAzureAD(options => configuration.Bind("AzureAd", options));
+            services.AddMicrosoftIdentityWebApiAuthentication(configuration, "AzureAd");
 
-            // TODO auth is currently hacky / simple - explore MSAL instead
-            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme,
-                options =>
-                {
-                    options.Authority += "/v2.0/";
-                    options.TokenValidationParameters.ValidateIssuer = true;
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        OnTokenValidated = async ctx =>
-                            {
-                                var emailClaim = ctx.Principal.FindFirst(ClaimTypes.Upn).Value.ToLower();
-                                var nameClaim = ctx.Principal.FindFirst(CustomClaimTypes.Name).Value;
-
-                                var db = ctx.HttpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
-                                var user = await db.Users.Where(o => o.Email == emailClaim).FirstOrDefaultAsync();
-
-                                if (user == null)
-                                {
-                                    user = new User
-                                    {
-                                        Email = emailClaim,
-
-                                        // TODO reconsider this long term
-                                        IsAdmin = true
-                                    };
-                                    db.Users.Add(user);
-                                }
-
-                                user.Name = nameClaim;
-
-                                await db.SaveChangesAsync();
-
-                                if (user.IsAdmin)
-                                {
-                                    var appIdentity = new ClaimsIdentity(new List<Claim>
-                                        {
-                                        new Claim(ClaimTypes.Role, "Admin")
-                                        });
-
-                                    ctx.Principal.AddIdentity(appIdentity);
-                                }
-                            }
-                    };
-                });
+            services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                var existingOnTokenValidatedHandler = options.Events.OnTokenValidated;
+                options.Events ??= new JwtBearerEvents();
+                options.Events.OnTokenValidated += OnTokenValidatedFunc;
+            });
         }
+
+        private static async Task OnTokenValidatedFunc(TokenValidatedContext context)
+        {
+            var emailClaim = context.Principal.FindFirst(ClaimTypes.Upn).Value.ToLower();
+            var givenNameClaim = context.Principal.FindFirst(ClaimTypes.GivenName).Value;
+            var surnameClaim = context.Principal.FindFirst(ClaimTypes.Surname).Value;
+            var db = context.HttpContext.RequestServices.GetRequiredService<ApplicationDbContext>();
+            var user = await db.Users.Where(o => o.Email == emailClaim).FirstOrDefaultAsync().ConfigureAwait(false);
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    Email = emailClaim,
+                };
+                db.Users.Add(user);
+            }
+
+            user.FirstName = givenNameClaim;
+            user.LastName = surnameClaim;
+
+            await db.SaveChangesAsync().ConfigureAwait(false);
+        }   
     }
 }

@@ -1,9 +1,9 @@
 #!/bin/bash
-pushd ../../src/Events.Data.Migrations
+pushd ../../src/Events.Data.Postgres
 
 read -p "Migration Name: " name
 
-dotnet ef migrations add $name
+dotnet ef migrations add $name --msbuildprojectextensionspath ./obj/local/
 
 popd
 

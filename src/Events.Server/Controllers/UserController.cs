@@ -1,6 +1,5 @@
-using Events.Data.Model;
+using Events.Data.Postgres;
 using Events.Shared.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,22 +20,19 @@ namespace Events.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get()
         {
             var models = await _dbctx.Users.Select(o => new UserModel
             {
                 Id = o.Id,
-                Name = o.Name,
-                Email = o.Email,
-                IsAdmin = o.IsAdmin
+                Name = $"{o.FirstName} {o.LastName}",
+                Email = o.Email
             }).ToListAsync();
 
             return Ok(models);
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
             var user = await _dbctx.Users.FindAsync(id);
@@ -49,24 +45,14 @@ namespace Events.Server.Controllers
             var userModel = new UserModel()
             {
                 Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                IsAdmin = user.IsAdmin
+                Name = $"{user.FirstName} {user.LastName}",
+                Email = user.Email
             };
 
             return Ok(userModel);
         }
 
-        // Only AD auth, this has no use
-        //[HttpPost]
-        //[Authorize(Roles = "Admin")]
-        //public IActionResult Post(UserModel model)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, UserModel model)
         {
             if (model == null)
@@ -81,14 +67,12 @@ namespace Events.Server.Controllers
                 return NotFound();
             }
 
-            user.IsAdmin = model.IsAdmin;
             await _dbctx.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _dbctx.Users.FindAsync(id);

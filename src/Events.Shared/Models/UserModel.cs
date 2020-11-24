@@ -11,8 +11,5 @@
         public string Email { get; set; }
 
         public string Role { get; set; }
-
-        [ListingColumn(DisplayName = "Is Admin")]
-        public bool IsAdmin { get; set; }
     }
 }

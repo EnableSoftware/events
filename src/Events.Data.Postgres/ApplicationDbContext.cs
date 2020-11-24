@@ -1,8 +1,9 @@
+using Events.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace Events.Data.Model
+namespace Events.Data.Postgres
 {
     public class ApplicationDbContext : DbContext
     {

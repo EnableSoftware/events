@@ -1,0 +1,50 @@
+version: '3.4'
+
+volumes:
+  local_postgres_data: {}
+
+services:
+  db-postgres:
+    image: postgres:13.1
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USERNAME: ${POSTGRES_DEFAULT_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_DEFAULT_PASSWORD:-postgres}
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+
+  db-migrations:
+    image: db-migrations
+    build:
+      context: .
+      dockerfile: ./src/Events.Data.Postgres/Dockerfile
+    depends_on:
+      - db-postgres
+
+  server:
+    image: events-server
+    build:
+      context: .
+      dockerfile: src/Events.Server/Dockerfile
+      target: build
+    ports:
+      - ${EXT_PORT_HTTP}:80
+      - ${EXT_PORT_HTTPS}:443
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNET_ENV}
+      - ASPNETCORE_URLS=http://+:80;http://+:443
+      - AZUREAD_DOMAIN=${EVENTS_AZUREAD_DOMAIN}
+      - AZUREAD_CLIENTID=${EVENTS_AZUREAD_CLIENTID}
+      - AZUREAD_TENANTID=${EVENTS_AZUREAD_TENANTID}
+      - CLIENT_AZUREAD_AUTHORITY=${EVENTS_CLIENT_AZUREAD_AUTHORITY}
+      - CLIENT_AZUREAD_CLIENTID=${EVENTS_CLIENT_AZUREAD_CLIENTID}
+      - CLIENT_AZUREAD_DEFAULTACCESSTOKENSCOPE=${EVENTS_CLIENT_AZUREAD_DEFAULTACCESSTOKENSCOPE}
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+      - ./src/:/app/src/
+      - $HOME/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+    depends_on:
+      - "db-migrations"
+    command: dotnet watch -p /app/src/Events.Server run --urls=http://+:80;http://+:443

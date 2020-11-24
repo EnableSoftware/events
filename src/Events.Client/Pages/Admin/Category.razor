@@ -1,7 +1,6 @@
 @page "/admin/category"
 @page "/admin/category/{Id:int}"
 @inherits CategoryBase
-@attribute [Authorize(Roles = "Admin")]
 
 @if (!IsLoading)
 {

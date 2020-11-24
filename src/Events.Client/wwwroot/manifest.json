@@ -1,6 +1,6 @@
 {
-  "short_name": "Events",
   "name": "Events",
+  "short_name": "Events",
   "description": "Events",
   "start_url": "/",
   "display": "standalone",

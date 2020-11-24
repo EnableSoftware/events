@@ -48,6 +48,11 @@ namespace Events.Client.Services.Api
             await _httpClient.DeleteAsync($"api/user/{id}");
         }
 
+        public async Task<UserModel> GetSelf()
+        {
+            return await _httpClient.GetFromJsonAsync<UserModel>("api/account/get-self");
+        }
+
         public async Task<Uri> GetProfileImageUrl()
         {
             var authenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();

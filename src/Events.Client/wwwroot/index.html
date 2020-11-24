@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Events</title>
     <base href="/" />
 
     <link rel="stylesheet" href="/css/bootstrap.custom.min.css" />
     <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
-    <link critical rel="stylesheet" href="/css/site.min.css" />
+    <link href="css/site.min.css" rel="stylesheet" />
+    <link href="Events.Client.styles.css" rel="stylesheet" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -23,17 +23,15 @@
 </head>
 
 <body>
-    <app>
+    <div id="app">
         <div class="loader">Loading...</div>
-    </app>
+    </div>
 
+    <script src="_content/Microsoft.Authentication.WebAssembly.Msal/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
-        }
-    </script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+
     <script>
         setTitle = (title) => { document.title = title; };
     </script>

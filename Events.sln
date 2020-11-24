@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events.Client", "src\Events
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events.Data.Model", "src\Events.Data.Model\Events.Data.Model.csproj", "{8A03317C-62A3-44DD-9767-F062629DE68F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events.Data.Migrations", "src\Events.Data.Migrations\Events.Data.Migrations.csproj", "{3A9771C9-81FD-47DE-8F18-4005F78D946E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events.Data.Postgres", "src\Events.Data.Postgres\Events.Data.Postgres.csproj", "{3A9771C9-81FD-47DE-8F18-4005F78D946E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Events.Shared", "src\Events.Shared\Events.Shared.csproj", "{02D46314-ADEB-4B44-90F9-F7EE275AB4FE}"
 EndProject

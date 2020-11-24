@@ -1,4 +1,5 @@
 using Events.Data.Model;
+using Events.Data.Postgres;
 using Events.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -86,7 +87,6 @@ namespace Events.Server.Controllers
             return Ok(categoryModel);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Post(CategoryModel model)
         {
@@ -101,7 +101,6 @@ namespace Events.Server.Controllers
             return Ok(category.Id);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, CategoryModel model)
         {
@@ -123,7 +122,6 @@ namespace Events.Server.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

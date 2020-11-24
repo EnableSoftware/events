@@ -1,12 +1,12 @@
-using Events.Client.Services.Api;
-using Events.Client.Services.Authentication;
-using Events.Client.State;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Events.Client.Services.Api;
+using Events.Client.State;
 
 namespace Events.Client
 {
@@ -15,33 +15,33 @@ namespace Events.Client
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");
-
-            builder.Services.AddSingleton(sp =>
-                new HttpClient
-                {
-                    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-                });
+            builder.RootComponents.Add<App>("#app");
 
             ConfigureServices(builder);
+            builder.Services.AddOptions();
+            builder.Services.AddAuthorizationCore();
 
             await builder.Build().RunAsync();
         }
 
         public static void ConfigureServices(WebAssemblyHostBuilder builder)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            builder.Services.AddHttpClient("Events.Server", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-            builder.Services.AddAuthorizationCore();
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("Events.Server"));
+
+            var defaultAccessTokenScope = builder.Configuration.GetValue<string>("AzureAD:DefaultAccessTokenScope");
+            builder.Services.AddMsalAuthentication(options =>
+            {
+                builder.Configuration.Bind("AzureAD", options.ProviderOptions.Authentication);
+                options.ProviderOptions.DefaultAccessTokenScopes.Add(defaultAccessTokenScope);
+            });
+
             builder.Services.AddScoped<CategoryApiService>();
             builder.Services.AddScoped<EventApiService>();
             builder.Services.AddScoped<UserApiService>();
             builder.Services.AddSingleton<UserState>();
-            builder.Services.AddOptions();
         }
     }
 }
