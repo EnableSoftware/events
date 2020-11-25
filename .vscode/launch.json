@@ -1,20 +1,23 @@
 {
-   // Use IntelliSense to find out which attributes exist for C# debugging
-   // Use hover for the description of the existing attributes
-   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
-       {
-           "name": "Docker .NET Core Attach",
-           "type": "docker",
-           "request": "attach",
-           "platform": "netCore",
-           "processName": "Events.Server",
-           "containerName": "/events_server_1",
-           "sourceFileMap": {
-               "/app/src": "${workspaceFolder}/src"
-           }
-       },
+        {
+            "type": "blazorwasm",
+            "request": "attach",
+            "name": "Attach and Debug",
+            "url": "http://localhost:5000"
+        },
+        {
+            "name": "Docker .NET Core Attach",
+            "type": "docker",
+            "request": "attach",
+            "platform": "netCore",
+            "processName": "Events.Server",
+            "containerName": "/events_server_1",
+            "sourceFileMap": {
+                "/app/src": "${workspaceFolder}/src"
+            }
+        },
     {
         "name": ".NET Core Launch (web)",
         "type": "coreclr",

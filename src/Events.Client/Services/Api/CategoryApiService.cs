@@ -1,4 +1,5 @@
 using Events.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -38,7 +39,8 @@ namespace Events.Client.Services.Api
 
         public async Task Delete(int id)
         {
-            await _httpClient.DeleteAsync($"api/category/{id}");
+            var uri = new Uri($"api/category/{id}");
+            await _httpClient.DeleteAsync(uri);
         }
     }
 }

@@ -1,12 +1,10 @@
+using Events.Shared.Hashes.Md5;
 using Events.Shared.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Events.Client.Services.Api
@@ -45,7 +43,8 @@ namespace Events.Client.Services.Api
 
         public async Task Delete(int id)
         {
-            await _httpClient.DeleteAsync($"api/user/{id}");
+            var uri = new Uri($"api/user/{id}");
+            await _httpClient.DeleteAsync(uri);
         }
 
         public async Task<UserModel> GetSelf()
@@ -56,31 +55,21 @@ namespace Events.Client.Services.Api
         public async Task<Uri> GetProfileImageUrl()
         {
             var authenticationState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var email = authenticationState.User.FindFirst(ClaimTypes.Upn);
+            var email = authenticationState.User.FindFirst("preferred_username");
 
-            if (email != null)
+            if (email != null && !string.IsNullOrEmpty(email.Value))
             {
-                #pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms
-                using (var md5 = MD5.Create())
-                #pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
+                var md5 = new Md5Hash
                 {
-                    var inputBytes = Encoding.ASCII.GetBytes(email.Value);
+                    Value = email.Value
+                };
 
-                    var hashBytes = md5.ComputeHash(inputBytes);
+                var hash = md5.FingerPrint.ToString().ToLower();
 
-                    var sb = new StringBuilder();
-                    for (int i = 0; i < hashBytes.Length; i++)
-                    {
-                        sb.Append(value: hashBytes[i].ToString("X2"));
-                    }
+                return new Uri($"https://www.gravatar.com/avatar/{hash}");
 
-                    var hash = sb.ToString().ToLower();
-
-                    return new Uri($"https://www.gravatar.com/avatar/{hash}");
-                }
             }
 
-            // TODO better default image
             return new Uri("https://www.gravatar.com/avatar/");
         }
     }

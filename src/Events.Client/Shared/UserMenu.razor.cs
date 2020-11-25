@@ -15,7 +15,7 @@ namespace Events.Client.Shared
 
         public Uri ProfileImageUrl { get; protected set; }
 
-        private bool _expandNavMenu = false;
+        private bool _expandNavMenu;
 
         protected string NavMenuCssClass => _expandNavMenu ? "expanded" : null;
 
@@ -34,7 +34,7 @@ namespace Events.Client.Shared
             }
         }
 
-        protected async Task BeginLogout(MouseEventArgs args)
+        protected async Task BeginLogout()
         {
             await SignOutManager.SetSignOutState();
             NavigationManager.NavigateTo("authentication/logout");

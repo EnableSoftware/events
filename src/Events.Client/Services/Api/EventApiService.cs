@@ -1,4 +1,5 @@
 using Events.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -43,7 +44,8 @@ namespace Events.Client.Services.Api
 
         public async Task Delete(int id)
         {
-            await _httpClient.DeleteAsync($"api/event/{id}");
+            var uri = new Uri($"api/event/{id}");
+            await _httpClient.DeleteAsync(uri);
         }
 
         public async Task SignUp(int id)
@@ -58,12 +60,14 @@ namespace Events.Client.Services.Api
 
         public async Task Lock(int id)
         {
-            await _httpClient.PutAsync($"api/event/lock-event/{id}", null);
+            var uri = new Uri($"api/event/lock-event/{id}");
+            await _httpClient.PutAsync(uri, null);
         }
 
         public async Task Unlock(int id)
         {
-            await _httpClient.PutAsync($"api/event/unlock-event/{id}", null);
+            var uri = new Uri($"api/event/unlock-event/{id}");
+            await _httpClient.PutAsync(uri, null);
         }
     }
 }

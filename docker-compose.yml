@@ -34,7 +34,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNET_ENV}
       - ASPNETCORE_URLS=http://+:80;http://+:443
-      - ASPNET_ENV=${DockerWeb.Environment:-Development}
       - AZUREAD_DOMAIN=${EVENTS_AZUREAD_DOMAIN}
       - AZUREAD_CLIENTID=${EVENTS_AZUREAD_CLIENTID}
       - AZUREAD_TENANTID=${EVENTS_AZUREAD_TENANTID}

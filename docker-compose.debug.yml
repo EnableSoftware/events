@@ -44,7 +44,8 @@ services:
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
       - ./src/:/app/src/
-      - $HOME/.microsoft/usersecrets/:/root/.microsoft/usersecrets
+      # - $APPDATA/Microsoft/UserSecrets/${USER_SECRETS_ID}:/root/.microsoft/usersecrets/${USER_SECRETS_ID}
+      - $HOME/.microsoft/usersecrets/${USER_SECRETS_ID}:/root/.microsoft/usersecrets/${USER_SECRETS_ID}
     depends_on:
       - "db-migrations"
     command: dotnet watch -p /app/src/Events.Server run --urls=http://+:80;http://+:443

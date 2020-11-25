@@ -17,7 +17,7 @@ namespace Events.Client.Shared
         [Inject]
         protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-        private bool _expandNavMenu = false;
+        private bool _expandNavMenu;
         protected bool IsLoading = true;
         protected IEnumerable<CategoryModel> Categories { get; set; }
 
@@ -43,7 +43,7 @@ namespace Events.Client.Shared
             StateHasChanged();
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             NavigationManager.LocationChanged += LocationChanged;
             base.OnInitialized();

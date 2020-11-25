@@ -6,6 +6,7 @@ namespace Events.Data.Postgres.Migrations
 {
     public partial class Initial : Migration
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional")]
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
